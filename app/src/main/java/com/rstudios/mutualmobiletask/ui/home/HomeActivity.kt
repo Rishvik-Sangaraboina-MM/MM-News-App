@@ -32,6 +32,7 @@ class HomeActivity : AppCompatActivity() {
     setContentView(binding.root)
     binding.bottomNavigationView.setupWithNavController(navController)
     setSupportActionBar(binding.mainToolbar)
+    print("hello")
   }
 
   //hello
