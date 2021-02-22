@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/headlinesFragment"
-        android:name="com.rstudios.mutualmobiletask.ui.HeadlinesFragment"
+        android:name="com.rstudios.mutualmobiletask.ui.home.HeadlinesFragment"
         android:label="fragment_headlines"
         tools:layout="@layout/fragment_headlines" />
     <fragment
         android:id="@+id/sourceFragment"
-        android:name="com.rstudios.mutualmobiletask.ui.SourceFragment"
+        android:name="com.rstudios.mutualmobiletask.ui.home.SourceFragment"
         android:label="fragment_source"
         tools:layout="@layout/fragment_source" />
 </navigation>

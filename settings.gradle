@@ -1,2 +1,3 @@
+include ':MyModule'
 include ':app'
 rootProject.name = "Mutual Mobile Task"

@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.SourceFragment">
+        tools:context=".ui.home.SourceFragment">
 
         <ProgressBar
             android:id="@+id/progressBar2"

@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".util.MyApplication"
+        android:name=".utils.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_stage_name"
@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MutualMobileTask">
 
         <activity
-            android:name=".ui.SearchResultsActivity"
+            android:name=".ui.search.SearchResultsActivity"
             android:label="Search Results">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -26,7 +26,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.home.HomeActivity"
             android:label="@string/app_stage_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

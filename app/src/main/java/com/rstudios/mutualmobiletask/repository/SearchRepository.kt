@@ -1,7 +1,10 @@
 package com.rstudios.mutualmobiletask.repository
 
 import com.rstudios.mutualmobiletask.api.RetrofitInstance
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SearchRepository {
-    suspend fun getEverything(keyword : String) = RetrofitInstance.newsApi.getEverything(keyword)
+@Singleton
+class SearchRepository @Inject constructor(){
+  suspend fun getEverything(keyword: String) = RetrofitInstance.newsApi.getEverything(keyword)
 }
