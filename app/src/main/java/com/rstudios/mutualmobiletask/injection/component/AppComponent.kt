@@ -1,31 +1,28 @@
 package com.rstudios.mutualmobiletask.injection.component
 
 import android.content.Context
-import com.rstudios.mutualmobiletask.injection.module.RecyclerAdapterModule
-import com.rstudios.mutualmobiletask.ui.home.HeadlinesFragment
-import com.rstudios.mutualmobiletask.utils.MyApplication
-import com.rstudios.mutualmobiletask.ui.home.HomeActivity
-import com.rstudios.mutualmobiletask.ui.home.SourceFragment
-import com.rstudios.mutualmobiletask.ui.search.SearchResultsActivity
+import com.rstudios.mutualmobiletask.BaseApplication
+import com.rstudios.mutualmobiletask.injection.module.ActivityBindingModule
+import com.rstudios.mutualmobiletask.injection.module.AppModule
+import com.rstudios.mutualmobiletask.injection.qualifiers.ApplicationContext
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [RecyclerAdapterModule::class])
-interface AppComponent {
+@Component(
+  modules = [AndroidSupportInjectionModule::class, AppModule::class, ActivityBindingModule::class]
+)
+interface AppComponent : AndroidInjector<BaseApplication> {
 
   @Component.Factory
-  interface Factory{
-    fun create(@BindsInstance application: MyApplication, @BindsInstance context: Context) : AppComponent
+  interface Factory {
+    fun create(
+      @BindsInstance application: BaseApplication, @BindsInstance @ApplicationContext context: Context
+    ): AppComponent
   }
 
-  fun inject(activity: HomeActivity)
-
-  fun inject(activity: SearchResultsActivity)
-
-  fun inject(headlinesFragment: HeadlinesFragment)
-
-  fun inject(sourceFragment: SourceFragment)
 
 }

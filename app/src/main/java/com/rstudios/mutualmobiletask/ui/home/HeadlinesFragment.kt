@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.rstudios.mutualmobiletask.api.Status
 import com.rstudios.mutualmobiletask.databinding.FragmentHeadlinesBinding
-import com.rstudios.mutualmobiletask.utils.MyApplication
+import com.rstudios.mutualmobiletask.model.Article
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class HeadlinesFragment : Fragment() {
-  private lateinit var viewModel: HomeVM
+class HeadlinesFragment : DaggerFragment() {
+  lateinit var viewModel: HomeVM
   private val binding: FragmentHeadlinesBinding by lazy {
     FragmentHeadlinesBinding.inflate(
       layoutInflater
@@ -25,11 +26,6 @@ class HeadlinesFragment : Fragment() {
   }
   @Inject
   lateinit var newsRecyclerAdapter: NewsRecyclerAdapter
-
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    ((requireActivity() as HomeActivity).application as MyApplication).appComponent.inject(this)
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -42,6 +38,7 @@ class HeadlinesFragment : Fragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    // newsRecyclerAdapter= NewsRecyclerAdapter(requireContext(), arrayListOf<Article>())
     binding.headlinesRecyclerview.adapter = newsRecyclerAdapter
     viewModel = (activity as HomeActivity).viewModel
     viewModel.headlines.observe(viewLifecycleOwner, { apiResponse ->

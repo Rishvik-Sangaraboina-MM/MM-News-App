@@ -14,13 +14,12 @@ import com.rstudios.mutualmobiletask.R
 import com.rstudios.mutualmobiletask.model.Article
 import javax.inject.Inject
 
-class NewsRecyclerAdapter constructor(context: Context,val list : ArrayList<Article>): RecyclerView.Adapter<NewsRecyclerAdapter.ArticleHolder>() {
-  lateinit var context: Context
+class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<Article>): RecyclerView.Adapter<NewsRecyclerAdapter.ArticleHolder>() {
+
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
   ): ArticleHolder {
-    context = parent.context
     return ArticleHolder(
       LayoutInflater.from(context).inflate(R.layout.layout_article, parent, false)
     )

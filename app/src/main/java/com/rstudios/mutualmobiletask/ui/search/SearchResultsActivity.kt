@@ -8,14 +8,16 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
-import com.rstudios.mutualmobiletask.utils.MyApplication
+import com.rstudios.mutualmobiletask.BaseApplication
 import com.rstudios.mutualmobiletask.api.Status
 import com.rstudios.mutualmobiletask.databinding.ActivitySearchResultsBinding
+import com.rstudios.mutualmobiletask.model.Article
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
 import com.rstudios.mutualmobiletask.utils.SearchVMProviderFactory
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class SearchResultsActivity : AppCompatActivity() {
+class SearchResultsActivity : DaggerAppCompatActivity() {
   @Inject
   lateinit var searchVMProviderFactory: SearchVMProviderFactory
   lateinit var VM: SearchVM
@@ -32,11 +34,11 @@ class SearchResultsActivity : AppCompatActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    (application as MyApplication).appComponent.inject(this)
     super.onCreate(savedInstanceState)
     VM = ViewModelProvider(this, searchVMProviderFactory).get(SearchVM::class.java)
     binding.lifecycleOwner = this
     setContentView(binding.root)
+    // newsRecyclerAdapter = NewsRecyclerAdapter(this, arrayListOf<Article>())
     binding.searchxRecyclerview.adapter = newsRecyclerAdapter
     setSupportActionBar(binding.searchToolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)

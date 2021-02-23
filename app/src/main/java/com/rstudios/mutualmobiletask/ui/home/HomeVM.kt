@@ -1,11 +1,13 @@
 package com.rstudios.mutualmobiletask.ui.home
 
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.rstudios.mutualmobiletask.utils.MyApplication
+import com.rstudios.mutualmobiletask.BaseApplication
 import com.rstudios.mutualmobiletask.api.ApiResponse
+import com.rstudios.mutualmobiletask.injection.scope.ActivityScope
 import com.rstudios.mutualmobiletask.model.NewsResponse
 import com.rstudios.mutualmobiletask.model.SourceResponse
 import com.rstudios.mutualmobiletask.repository.MainRepository
@@ -13,11 +15,16 @@ import com.rstudios.mutualmobiletask.utils.Constants
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class HomeVM constructor(
-  application: MyApplication,
+class HomeVM @Inject constructor(
+  application: BaseApplication,
   val mainRepository: MainRepository
 ) : AndroidViewModel(application) {
+
+  init {
+    Log.i("HomeVM","Initialized")
+  }
   private val _headlines: MutableLiveData<ApiResponse<NewsResponse>> = MutableLiveData()
   val headlines: LiveData<ApiResponse<NewsResponse>> = _headlines
 

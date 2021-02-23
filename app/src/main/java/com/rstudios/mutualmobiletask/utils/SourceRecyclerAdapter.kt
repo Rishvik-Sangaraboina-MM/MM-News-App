@@ -11,15 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rstudios.mutualmobiletask.R
 import com.rstudios.mutualmobiletask.model.SourceX
 
-class SourceRecyclerAdapter : RecyclerView.Adapter<SourceRecyclerAdapter.SourceHolder>() {
-  val list = arrayListOf<SourceX>()
-  lateinit var context: Context
+class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceX>) : RecyclerView.Adapter<SourceRecyclerAdapter.SourceHolder>() {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
   ): SourceHolder {
-    context = parent.context
     return SourceHolder(LayoutInflater.from(context).inflate(R.layout.layout_source, parent, false))
   }
 

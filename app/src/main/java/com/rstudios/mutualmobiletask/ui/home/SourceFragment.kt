@@ -14,11 +14,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.rstudios.mutualmobiletask.R
 import com.rstudios.mutualmobiletask.api.Status
 import com.rstudios.mutualmobiletask.databinding.FragmentSourceBinding
-import com.rstudios.mutualmobiletask.utils.MyApplication
 import com.rstudios.mutualmobiletask.utils.SourceRecyclerAdapter
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class SourceFragment : Fragment(R.layout.fragment_source) {
+class SourceFragment : DaggerFragment(R.layout.fragment_source) {
   lateinit var viewModel: HomeVM
   private val binding: FragmentSourceBinding by lazy {
     FragmentSourceBinding.inflate(
@@ -28,10 +28,6 @@ class SourceFragment : Fragment(R.layout.fragment_source) {
   @Inject
   lateinit var sourceRecyclerAdapter: SourceRecyclerAdapter
 
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    ((requireActivity() as HomeActivity).application as MyApplication).appComponent.inject(this)
-  }
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
