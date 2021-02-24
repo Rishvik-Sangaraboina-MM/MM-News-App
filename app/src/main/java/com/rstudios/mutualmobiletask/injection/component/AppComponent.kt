@@ -23,6 +23,4 @@ interface AppComponent : AndroidInjector<BaseApplication> {
       @BindsInstance application: BaseApplication, @BindsInstance @ApplicationContext context: Context
     ): AppComponent
   }
-
-
 }
