@@ -22,25 +22,25 @@ class SearchVM constructor(
   val search: LiveData<ApiResponse<NewsResponse>> = _search
 
   fun getEverything(keyword: String) = viewModelScope.launch {
-    _search.value = ApiResponse.loading(null)
+    _search.value = ApiResponse.Loading
     try {
       if (Constants.hasInternetConnection(getApplication())) {
         val response = searchRepository.getEverything(keyword)
-        _search.value = handleRetrofitResponse<NewsResponse>(response)
+        _search.value = handleRetrofitResponse(response)
       } else {
-        _search.value = ApiResponse.error(null, "No Internet Connection")
+        _search.value = ApiResponse.Error(null, "No Internet Connection")
       }
     } catch (t: Throwable) {
       when (t) {
-        is IOException -> _search.value = ApiResponse.error(null, "Network Failure")
-        else -> _search.value = ApiResponse.error(null, "Conversion Error")
+        is IOException -> _search.value = ApiResponse.Error(null, "Network Failure")
+        else -> _search.value = ApiResponse.Error(null, "Conversion Error")
       }
     }
   }
 
-  private fun <T> handleRetrofitResponse(response: Response<T>): ApiResponse<T> {
+  private fun <T> handleRetrofitResponse(response: Response<T>): ApiResponse<T>{
     if (response.isSuccessful)
-      response.body()?.let { return ApiResponse.success(it) }
-    return ApiResponse.error(null, response.message())
+      response.body()?.let { return ApiResponse.Success(it,"Successful") }
+    return ApiResponse.Error(null, response.message())
   }
 }

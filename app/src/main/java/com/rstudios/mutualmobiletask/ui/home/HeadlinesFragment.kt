@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.rstudios.mutualmobiletask.api.Status
+import com.rstudios.mutualmobiletask.api.ApiResponse.Error
+import com.rstudios.mutualmobiletask.api.ApiResponse.Loading
+import com.rstudios.mutualmobiletask.api.ApiResponse.Success
 import com.rstudios.mutualmobiletask.databinding.FragmentHeadlinesBinding
 import com.rstudios.mutualmobiletask.model.Article
+import com.rstudios.mutualmobiletask.model.NewsResponse
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -38,31 +41,28 @@ class HeadlinesFragment : DaggerFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    // newsRecyclerAdapter= NewsRecyclerAdapter(requireContext(), arrayListOf<Article>())
     binding.headlinesRecyclerview.adapter = newsRecyclerAdapter
     viewModel = (activity as HomeActivity).viewModel
-    viewModel.headlines.observe(viewLifecycleOwner, { apiResponse ->
-      when (apiResponse.status) {
-        Status.LOADING -> {
-          binding.progressBar.visibility = View.VISIBLE
-        }
-        Status.SUCCESS -> {
-          binding.progressBar.visibility = View.GONE
-          apiResponse.data?.let { newsRecyclerAdapter.list.addAll(apiResponse.data.articles) }
-        }
-        Status.ERROR -> {
+    viewModel.headlines.observe(viewLifecycleOwner){
+      when (it) {
+        is Error -> {
           binding.progressBar.visibility = View.GONE
           Snackbar.make(
             (activity as HomeActivity).findViewById(android.R.id.content),
-            apiResponse.message + "",
+            it.message + "",
             Snackbar.LENGTH_INDEFINITE
           ).setAction("Retry") {
             viewModel.getHeadlines()
           }.show()
         }
+        Loading -> binding.progressBar.visibility = View.VISIBLE
+        is Success -> {
+          binding.progressBar.visibility = View.GONE
+          it.data?.let { newsRecyclerAdapter.list.addAll(it.articles) }
+        }
       }
       newsRecyclerAdapter.notifyDataSetChanged()
-    })
+    }
     viewModel.selected.observe(viewLifecycleOwner) {
       binding.headlinesRecyclerview.layoutManager = when (it) {
         0 -> LinearLayoutManager(context)

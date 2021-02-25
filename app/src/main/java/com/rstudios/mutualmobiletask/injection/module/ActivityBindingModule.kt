@@ -10,10 +10,12 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ActivityBindingModule {
-  
+
+  @ActivityScope
   @ContributesAndroidInjector(modules = [HomeActivityModule::class])
   abstract fun bindHomeActivity() : HomeActivity
-
+  
+  @ActivityScope
   @ContributesAndroidInjector(modules = [SearchActivityModule::class])
   abstract fun bindSearchResultsActivity() : SearchResultsActivity
 

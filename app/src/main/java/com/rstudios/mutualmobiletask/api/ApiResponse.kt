@@ -1,25 +1,16 @@
 package com.rstudios.mutualmobiletask.api
 
-data class ApiResponse<T>(
-  val status: Status,
-  val data: T?,
-  val message: String?
-) {
+sealed class ApiResponse<out T> {
 
-  companion object {
-    fun <T> success(data: T?) = ApiResponse(Status.SUCCESS, data, null)
+  data class Success<T>(
+    val data: T?,
+    val message: String?
+  ) : ApiResponse<T>()
 
-    fun <T> loading(data: T?) = ApiResponse(Status.LOADING, data, null)
+  object Loading : ApiResponse<Nothing>()
 
-    fun <T> error(
-      data: T?,
-      message: String?
-    ) = ApiResponse(Status.ERROR, data, message)
-  }
-}
-
-enum class Status {
-  SUCCESS,
-  ERROR,
-  LOADING
+  data class Error<T>(
+    val data: T?,
+    val message: String?
+  ) : ApiResponse<T>()
 }

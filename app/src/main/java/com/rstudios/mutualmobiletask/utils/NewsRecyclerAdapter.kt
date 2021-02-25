@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rstudios.mutualmobiletask.R
+import com.rstudios.mutualmobiletask.databinding.LayoutArticleBinding
 import com.rstudios.mutualmobiletask.model.Article
 import javax.inject.Inject
 
@@ -29,22 +31,7 @@ class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<
     holder: ArticleHolder,
     position: Int
   ) {
-    val article = list[position]
-    holder.title.text = article.title
-    holder.desc.text = article.description
-    article.urlToImage?.let {
-      Glide.with(context)
-        .load(Uri.parse(it))
-        .centerCrop()
-        .placeholder(R.drawable.ic_baseline_image_24)
-        .into(holder.image)
-    }
-    holder.view.setOnClickListener {
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse(article.url)
-      val chooser = Intent.createChooser(intent, "Open with")
-      context.startActivity(chooser)
-    }
+    holder.bind(list[position],context)
   }
 
   override fun getItemCount(): Int {
@@ -52,8 +39,28 @@ class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<
   }
 
   class ArticleHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val image: ImageView = view.findViewById(R.id.news_image)
-    val title: TextView = view.findViewById(R.id.news_title)
-    val desc: TextView = view.findViewById(R.id.news_description)
+    val binding : LayoutArticleBinding = LayoutArticleBinding.bind(view)
+    val image: ImageView = binding.newsImage
+    val title: TextView = binding.newsTitle
+    val desc: TextView = binding.newsDescription
+
+    fun bind(article: Article,context: Context){
+      title.text = article.title
+      desc.text = article.description
+      article.urlToImage?.let {
+        Glide.with(context)
+          .load(Uri.parse(it))
+          .centerCrop()
+          .placeholder(R.drawable.ic_baseline_image_24)
+          .into(image)
+      }
+      binding.root.setOnClickListener {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(article.url)
+        val chooser = Intent.createChooser(intent, "Open with")
+        context.startActivity(chooser)
+      }
+    }
+
   }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.rstudios.mutualmobiletask.BaseApplication
 import com.rstudios.mutualmobiletask.injection.module.ActivityBindingModule
 import com.rstudios.mutualmobiletask.injection.module.AppModule
+import com.rstudios.mutualmobiletask.injection.module.NetworkModule
 import com.rstudios.mutualmobiletask.injection.qualifiers.ApplicationContext
 import dagger.BindsInstance
 import dagger.Component
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-  modules = [AndroidSupportInjectionModule::class, AppModule::class, ActivityBindingModule::class]
+  modules = [AndroidSupportInjectionModule::class, AppModule::class, ActivityBindingModule::class, NetworkModule::class]
 )
 interface AppComponent : AndroidInjector<BaseApplication> {
 

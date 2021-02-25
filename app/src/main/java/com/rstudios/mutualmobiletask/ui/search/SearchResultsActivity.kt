@@ -1,5 +1,6 @@
 package com.rstudios.mutualmobiletask.ui.search
 
+import android.R.id
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.rstudios.mutualmobiletask.BaseApplication
-import com.rstudios.mutualmobiletask.api.Status
+import com.rstudios.mutualmobiletask.api.ApiResponse.Error
+import com.rstudios.mutualmobiletask.api.ApiResponse.Loading
+import com.rstudios.mutualmobiletask.api.ApiResponse.Success
 import com.rstudios.mutualmobiletask.databinding.ActivitySearchResultsBinding
 import com.rstudios.mutualmobiletask.model.Article
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
@@ -44,28 +47,28 @@ class SearchResultsActivity : DaggerAppCompatActivity() {
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     handleIntent(intent, false)
     VM.search.observe(this) {
-      when (it.status) {
-        Status.LOADING -> {
-          binding.progressBar4.visibility = View.VISIBLE
-          newsRecyclerAdapter.list.clear()
-        }
-        Status.SUCCESS -> {
-          binding.progressBar4.visibility = View.GONE
-          it.data?.let {
-            newsRecyclerAdapter.list.addAll(it.articles)
-            Log.i("Search", "Success $it")
-          }
-        }
-        Status.ERROR -> {
+      when (it) {
+        is Error -> {
           binding.progressBar4.visibility = View.GONE
           Log.i("Search", "Error" + it.message)
           Snackbar.make(
-            findViewById(android.R.id.content),
+            findViewById(id.content),
             it.message + "",
             Snackbar.LENGTH_INDEFINITE
           ).setAction("Retry") {
             handleIntent(intent, true)
           }.show()
+        }
+        Loading -> {
+          binding.progressBar4.visibility = View.VISIBLE
+          newsRecyclerAdapter.list.clear()
+        }
+        is Success -> {
+          binding.progressBar4.visibility = View.GONE
+          it.data?.let {
+            newsRecyclerAdapter.list.addAll(it.articles)
+            Log.i("Search", "Success $it")
+          }
         }
       }
       Log.i("Search", "observer")

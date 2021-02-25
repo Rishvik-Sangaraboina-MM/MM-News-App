@@ -7,14 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.rstudios.mutualmobiletask.BaseApplication
 import com.rstudios.mutualmobiletask.api.ApiResponse
-import com.rstudios.mutualmobiletask.injection.scope.ActivityScope
 import com.rstudios.mutualmobiletask.model.NewsResponse
 import com.rstudios.mutualmobiletask.model.SourceResponse
 import com.rstudios.mutualmobiletask.repository.MainRepository
 import com.rstudios.mutualmobiletask.utils.Constants
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import java.io.IOException
 import javax.inject.Inject
 
 class HomeVM @Inject constructor(
@@ -41,36 +39,30 @@ class HomeVM @Inject constructor(
   }
 
   fun getHeadlines() = viewModelScope.launch {
-    _headlines.value = ApiResponse.loading(null)
+    _headlines.value = ApiResponse.Loading
     try {
       if (Constants.hasInternetConnection(getApplication())) {
         val response = mainRepository.getHeadLines()
-        _headlines.value = handleRetrofitResponse<NewsResponse>(response)
+        _headlines.value = handleRetrofitResponse(response)
       } else {
-        _headlines.value = ApiResponse.error(null, "No Internet Connection")
+        _headlines.value = ApiResponse.Error(null, "No Internet Connection")
       }
     } catch (t: Throwable) {
-      when (t) {
-        is IOException -> _headlines.value = ApiResponse.error(null, "Network Failure")
-        else -> _headlines.value = ApiResponse.error(null, "Conversion Error")
-      }
+      _headlines.value = ApiResponse.Error(null, "Error")
     }
   }
 
   fun getSources() = viewModelScope.launch {
-    _sources.value = ApiResponse.loading(null)
+    _sources.value = ApiResponse.Loading
     try {
       if (Constants.hasInternetConnection(getApplication())) {
         val response = mainRepository.getSources()
-        _sources.value = handleRetrofitResponse<SourceResponse>(response)
+        _sources.value = handleRetrofitResponse(response)
       } else {
-        _sources.value = ApiResponse.error(null, "No Internet Connection")
+        _sources.value = ApiResponse.Error(null, "No Internet Connection")
       }
     } catch (t: Throwable) {
-      when (t) {
-        is IOException -> _sources.value = ApiResponse.error(null, "Network Failure")
-        else -> _sources.value = ApiResponse.error(null, "Conversion Error")
-      }
+      _headlines.value = ApiResponse.Error(null, "Error")
     }
   }
 
@@ -80,7 +72,7 @@ class HomeVM @Inject constructor(
 
   private fun <T> handleRetrofitResponse(response: Response<T>): ApiResponse<T> {
     if (response.isSuccessful)
-      response.body()?.let { return ApiResponse.success(it) }
-    return ApiResponse.error(null, response.message())
+      response.body()?.let { return ApiResponse.Success<T>(it,"Successful") }
+    return ApiResponse.Error(null, response.message())
   }
 }

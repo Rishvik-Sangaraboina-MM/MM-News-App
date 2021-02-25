@@ -5,14 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.rstudios.mutualmobiletask.R
-import com.rstudios.mutualmobiletask.api.Status
+import com.rstudios.mutualmobiletask.api.ApiResponse.Error
+import com.rstudios.mutualmobiletask.api.ApiResponse.Loading
+import com.rstudios.mutualmobiletask.api.ApiResponse.Success
 import com.rstudios.mutualmobiletask.databinding.FragmentSourceBinding
 import com.rstudios.mutualmobiletask.utils.SourceRecyclerAdapter
 import dagger.android.support.DaggerFragment
@@ -42,15 +43,8 @@ class SourceFragment : DaggerFragment(R.layout.fragment_source) {
     binding.sourceRecyclerview.adapter = sourceRecyclerAdapter
     viewModel = (activity as HomeActivity).viewModel
     viewModel.sources.observe(viewLifecycleOwner, Observer { apiResponse ->
-      when (apiResponse.status) {
-        Status.LOADING -> {
-          binding.progressBar2.visibility = View.VISIBLE
-        }
-        Status.SUCCESS -> {
-          binding.progressBar2.visibility = View.GONE
-          apiResponse.data?.let { sourceRecyclerAdapter.list.addAll(it.sources) }
-        }
-        Status.ERROR -> {
+      when (apiResponse) {
+        is Error -> {
           binding.progressBar2.visibility = View.GONE
           Snackbar.make(
             (activity as HomeActivity).findViewById(android.R.id.content),
@@ -59,6 +53,11 @@ class SourceFragment : DaggerFragment(R.layout.fragment_source) {
           ).setAction("Retry") {
             viewModel.getSources()
           }.show()
+        }
+        Loading -> binding.progressBar2.visibility = View.VISIBLE
+        is Success -> {
+          binding.progressBar2.visibility = View.GONE
+          apiResponse.data?.let { sourceRecyclerAdapter.list.addAll(it.sources) }
         }
       }
       sourceRecyclerAdapter.notifyDataSetChanged()

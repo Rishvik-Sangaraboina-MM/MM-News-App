@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rstudios.mutualmobiletask.R
+import com.rstudios.mutualmobiletask.databinding.LayoutSourceBinding
 import com.rstudios.mutualmobiletask.model.SourceX
 
 class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceX>) : RecyclerView.Adapter<SourceRecyclerAdapter.SourceHolder>() {
@@ -24,16 +25,7 @@ class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceX>) 
     holder: SourceHolder,
     position: Int
   ) {
-    val sourceX = list[position]
-    holder.name.text = sourceX.name
-    holder.desc.text = sourceX.description
-    holder.url.text = sourceX.url
-    holder.view.setOnClickListener {
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse(sourceX.url)
-      val chooser = Intent.createChooser(intent, "Open with")
-      context.startActivity(chooser)
-    }
+    holder.bind(list[position],context)
   }
 
   override fun getItemCount(): Int {
@@ -41,8 +33,21 @@ class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceX>) 
   }
 
   class SourceHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val name: TextView = view.findViewById(R.id.source_name)
-    val desc: TextView = view.findViewById(R.id.source_desc)
-    val url: TextView = view.findViewById(R.id.source_url)
+    val binding = LayoutSourceBinding.bind(view)
+    val name: TextView = binding.sourceName
+    val desc: TextView = binding.sourceDesc
+    val url: TextView = binding.sourceUrl
+
+    fun bind(sourceX: SourceX,context: Context){
+      name.text = sourceX.name
+      desc.text = sourceX.description
+      url.text = sourceX.url
+      binding.root.setOnClickListener {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(sourceX.url)
+        val chooser = Intent.createChooser(intent, "Open with")
+        context.startActivity(chooser)
+      }
+    }
   }
 }
