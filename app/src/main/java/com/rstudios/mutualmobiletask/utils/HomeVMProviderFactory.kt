@@ -3,15 +3,15 @@ package com.rstudios.mutualmobiletask.utils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rstudios.mutualmobiletask.BaseApplication
-import com.rstudios.mutualmobiletask.repository.MainRepository
+import com.example.data.HomeRepository
 import com.rstudios.mutualmobiletask.ui.home.HomeVM
 import javax.inject.Inject
 
 class HomeVMProviderFactory @Inject constructor(
   val application: BaseApplication,
-  val mainRepository: MainRepository
+  private val homeRepository: HomeRepository
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-    return HomeVM(application, mainRepository) as T
+    return HomeVM(application, homeRepository) as T
   }
 }

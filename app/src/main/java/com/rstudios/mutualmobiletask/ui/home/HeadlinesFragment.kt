@@ -1,21 +1,18 @@
 package com.rstudios.mutualmobiletask.ui.home
 
-import android.content.Context
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.rstudios.mutualmobiletask.api.ApiResponse.Error
-import com.rstudios.mutualmobiletask.api.ApiResponse.Loading
-import com.rstudios.mutualmobiletask.api.ApiResponse.Success
+import com.example.data.remote.ApiResponse.Error
+import com.example.data.remote.ApiResponse.Loading
+import com.example.data.remote.ApiResponse.Success
 import com.rstudios.mutualmobiletask.databinding.FragmentHeadlinesBinding
-import com.rstudios.mutualmobiletask.model.Article
-import com.rstudios.mutualmobiletask.model.NewsResponse
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -48,17 +45,21 @@ class HeadlinesFragment : DaggerFragment() {
         is Error -> {
           binding.progressBar.visibility = View.GONE
           Snackbar.make(
-            (activity as HomeActivity).findViewById(android.R.id.content),
+            (activity as HomeActivity).findViewById(R.id.content),
             it.message + "",
             Snackbar.LENGTH_INDEFINITE
           ).setAction("Retry") {
             viewModel.getHeadlines()
           }.show()
+          it.data?.let { newsRecyclerAdapter.list.addAll(it.articleEntities) }
         }
         Loading -> binding.progressBar.visibility = View.VISIBLE
         is Success -> {
           binding.progressBar.visibility = View.GONE
-          it.data?.let { newsRecyclerAdapter.list.addAll(it.articles) }
+          it.data?.let {
+            newsRecyclerAdapter.list.addAll(it.articleEntities)
+            viewModel.insertArticles(it.articleEntities)
+          }
         }
       }
       newsRecyclerAdapter.notifyDataSetChanged()

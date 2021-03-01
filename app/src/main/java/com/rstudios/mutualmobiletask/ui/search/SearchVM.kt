@@ -5,9 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.rstudios.mutualmobiletask.api.ApiResponse
-import com.rstudios.mutualmobiletask.model.NewsResponse
-import com.rstudios.mutualmobiletask.repository.SearchRepository
+import com.example.data.remote.ApiResponse
+import com.example.data.remote.model.NewsResponse
+import com.example.data.SearchRepository
 import com.rstudios.mutualmobiletask.utils.Constants
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -25,7 +25,7 @@ class SearchVM constructor(
     _search.value = ApiResponse.Loading
     try {
       if (Constants.hasInternetConnection(getApplication())) {
-        val response = searchRepository.getEverything(keyword)
+        val response = searchRepository.getRemoteEverything(keyword)
         _search.value = handleRetrofitResponse(response)
       } else {
         _search.value = ApiResponse.Error(null, "No Internet Connection")
@@ -38,7 +38,7 @@ class SearchVM constructor(
     }
   }
 
-  private fun <T> handleRetrofitResponse(response: Response<T>): ApiResponse<T>{
+  private fun <T> handleRetrofitResponse(response: Response<T>): ApiResponse<T> {
     if (response.isSuccessful)
       response.body()?.let { return ApiResponse.Success(it,"Successful") }
     return ApiResponse.Error(null, response.message())

@@ -8,15 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.data.local.entity.ArticleEntity
 import com.rstudios.mutualmobiletask.R
 import com.rstudios.mutualmobiletask.databinding.LayoutArticleBinding
-import com.rstudios.mutualmobiletask.model.Article
-import javax.inject.Inject
 
-class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<Article>): RecyclerView.Adapter<NewsRecyclerAdapter.ArticleHolder>() {
+class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<ArticleEntity>): RecyclerView.Adapter<NewsRecyclerAdapter.ArticleHolder>() {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -44,10 +42,10 @@ class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<
     val title: TextView = binding.newsTitle
     val desc: TextView = binding.newsDescription
 
-    fun bind(article: Article,context: Context){
-      title.text = article.title
-      desc.text = article.description
-      article.urlToImage?.let {
+    fun bind(articleEntity: ArticleEntity,context: Context){
+      title.text = articleEntity.title
+      desc.text = articleEntity.description
+      articleEntity.urlToImage?.let {
         Glide.with(context)
           .load(Uri.parse(it))
           .centerCrop()
@@ -56,7 +54,7 @@ class NewsRecyclerAdapter constructor(val context: Context,val list : ArrayList<
       }
       binding.root.setOnClickListener {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(article.url)
+        intent.data = Uri.parse(articleEntity.url)
         val chooser = Intent.createChooser(intent, "Open with")
         context.startActivity(chooser)
       }

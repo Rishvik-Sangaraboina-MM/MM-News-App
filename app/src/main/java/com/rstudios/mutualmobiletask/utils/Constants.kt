@@ -9,11 +9,6 @@ import com.rstudios.mutualmobiletask.BaseApplication
 class Constants {
   companion object {
     val BASE_URL = "https://newsapi.org"
-    val HEADLINES_URL = "v2/top-headlines"
-    val SOURCE_URL = "v2/sources"
-    val EVERYTHING_URL = "v2/everything"
-    val API_KEY = "06ea1d1712274203b4985c97762f4456"
-
     fun hasInternetConnection(application: BaseApplication): Boolean {
       val connectivityManager = application.getSystemService(
         Context.CONNECTIVITY_SERVICE

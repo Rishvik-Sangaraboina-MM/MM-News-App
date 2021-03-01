@@ -3,7 +3,7 @@ package com.rstudios.mutualmobiletask.utils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rstudios.mutualmobiletask.BaseApplication
-import com.rstudios.mutualmobiletask.repository.SearchRepository
+import com.example.data.SearchRepository
 import com.rstudios.mutualmobiletask.ui.search.SearchVM
 import javax.inject.Inject
 

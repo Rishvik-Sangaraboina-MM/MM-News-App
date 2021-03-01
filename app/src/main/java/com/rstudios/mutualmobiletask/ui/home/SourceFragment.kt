@@ -1,6 +1,5 @@
 package com.rstudios.mutualmobiletask.ui.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.rstudios.mutualmobiletask.R
-import com.rstudios.mutualmobiletask.api.ApiResponse.Error
-import com.rstudios.mutualmobiletask.api.ApiResponse.Loading
-import com.rstudios.mutualmobiletask.api.ApiResponse.Success
+import com.example.data.remote.ApiResponse.Error
+import com.example.data.remote.ApiResponse.Loading
+import com.example.data.remote.ApiResponse.Success
 import com.rstudios.mutualmobiletask.databinding.FragmentSourceBinding
 import com.rstudios.mutualmobiletask.utils.SourceRecyclerAdapter
 import dagger.android.support.DaggerFragment
@@ -26,6 +25,7 @@ class SourceFragment : DaggerFragment(R.layout.fragment_source) {
       layoutInflater
     )
   }
+
   @Inject
   lateinit var sourceRecyclerAdapter: SourceRecyclerAdapter
 
@@ -53,11 +53,15 @@ class SourceFragment : DaggerFragment(R.layout.fragment_source) {
           ).setAction("Retry") {
             viewModel.getSources()
           }.show()
+          apiResponse.data?.let { sourceRecyclerAdapter.list.addAll(it.sourceEntities) }
         }
         Loading -> binding.progressBar2.visibility = View.VISIBLE
         is Success -> {
           binding.progressBar2.visibility = View.GONE
-          apiResponse.data?.let { sourceRecyclerAdapter.list.addAll(it.sources) }
+          apiResponse.data?.let {
+            sourceRecyclerAdapter.list.addAll(it.sourceEntities)
+            viewModel.insertSources(it.sourceEntities)
+          }
         }
       }
       sourceRecyclerAdapter.notifyDataSetChanged()

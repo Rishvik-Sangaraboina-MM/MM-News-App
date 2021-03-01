@@ -6,15 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
-import com.rstudios.mutualmobiletask.BaseApplication
-import com.rstudios.mutualmobiletask.api.ApiResponse.Error
-import com.rstudios.mutualmobiletask.api.ApiResponse.Loading
-import com.rstudios.mutualmobiletask.api.ApiResponse.Success
+import com.example.data.remote.ApiResponse.Error
+import com.example.data.remote.ApiResponse.Loading
+import com.example.data.remote.ApiResponse.Success
 import com.rstudios.mutualmobiletask.databinding.ActivitySearchResultsBinding
-import com.rstudios.mutualmobiletask.model.Article
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
 import com.rstudios.mutualmobiletask.utils.SearchVMProviderFactory
 import dagger.android.support.DaggerAppCompatActivity
@@ -66,7 +63,7 @@ class SearchResultsActivity : DaggerAppCompatActivity() {
         is Success -> {
           binding.progressBar4.visibility = View.GONE
           it.data?.let {
-            newsRecyclerAdapter.list.addAll(it.articles)
+            newsRecyclerAdapter.list.addAll(it.articleEntities)
             Log.i("Search", "Success $it")
           }
         }

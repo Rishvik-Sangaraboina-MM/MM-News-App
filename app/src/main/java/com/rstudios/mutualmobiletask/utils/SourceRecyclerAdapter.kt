@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.data.local.entity.SourceXEntity
 import com.rstudios.mutualmobiletask.R
 import com.rstudios.mutualmobiletask.databinding.LayoutSourceBinding
-import com.rstudios.mutualmobiletask.model.SourceX
 
-class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceX>) : RecyclerView.Adapter<SourceRecyclerAdapter.SourceHolder>() {
+class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceXEntity>) : RecyclerView.Adapter<SourceRecyclerAdapter.SourceHolder>() {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -38,13 +38,13 @@ class SourceRecyclerAdapter(val context: Context,val list : ArrayList<SourceX>) 
     val desc: TextView = binding.sourceDesc
     val url: TextView = binding.sourceUrl
 
-    fun bind(sourceX: SourceX,context: Context){
-      name.text = sourceX.name
-      desc.text = sourceX.description
-      url.text = sourceX.url
+    fun bind(sourceXEntity: SourceXEntity,context: Context){
+      name.text = sourceXEntity.name
+      desc.text = sourceXEntity.description
+      url.text = sourceXEntity.url
       binding.root.setOnClickListener {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(sourceX.url)
+        intent.data = Uri.parse(sourceXEntity.url)
         val chooser = Intent.createChooser(intent, "Open with")
         context.startActivity(chooser)
       }

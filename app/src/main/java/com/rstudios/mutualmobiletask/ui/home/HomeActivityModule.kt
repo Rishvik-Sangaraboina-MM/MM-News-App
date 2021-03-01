@@ -1,9 +1,9 @@
 package com.rstudios.mutualmobiletask.ui.home
 
 import android.content.Context
+import com.example.data.local.entity.ArticleEntity
+import com.example.data.local.entity.SourceXEntity
 import com.rstudios.mutualmobiletask.injection.qualifiers.ActivityContext
-import com.rstudios.mutualmobiletask.model.Article
-import com.rstudios.mutualmobiletask.model.SourceX
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
 import com.rstudios.mutualmobiletask.utils.SourceRecyclerAdapter
 import dagger.Binds
@@ -25,13 +25,14 @@ abstract class HomeActivityModule {
   companion object{
     @Provides
     fun provideNewsRecyclerAdapter(@ActivityContext context: Context) : NewsRecyclerAdapter{
-      return NewsRecyclerAdapter(context,arrayListOf<Article>())
+      return NewsRecyclerAdapter(context,arrayListOf<ArticleEntity>())
     }
 
     @Provides
     fun provideSourceRecyclerAdapter(@ActivityContext context: Context) : SourceRecyclerAdapter{
-      return SourceRecyclerAdapter(context, arrayListOf<SourceX>())
+      return SourceRecyclerAdapter(context, arrayListOf<SourceXEntity>())
     }
+
   }
 
 

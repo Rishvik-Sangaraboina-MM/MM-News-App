@@ -1,8 +1,8 @@
 package com.rstudios.mutualmobiletask.ui.search
 
 import android.content.Context
+import com.example.data.local.entity.ArticleEntity
 import com.rstudios.mutualmobiletask.injection.qualifiers.ActivityContext
-import com.rstudios.mutualmobiletask.model.Article
 import com.rstudios.mutualmobiletask.utils.NewsRecyclerAdapter
 import dagger.Binds
 import dagger.Module
@@ -18,8 +18,10 @@ abstract class SearchActivityModule {
   companion object{
     @Provides
     fun provideNewsRecyclerAdapter(@ActivityContext context: Context) : NewsRecyclerAdapter{
-      return NewsRecyclerAdapter(context,arrayListOf<Article>())
+      return NewsRecyclerAdapter(context,arrayListOf<ArticleEntity>())
     }
+
+
   }
 
 }
